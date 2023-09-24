@@ -1,0 +1,155 @@
+definitions:
+  response.FailureResponse:
+    properties:
+      failure:
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  response.SuccessResponse:
+    properties:
+      result: {}
+      success:
+        example: true
+        type: boolean
+    type: object
+  v1.GetArticleDTO:
+    properties:
+      content:
+        type: string
+      description:
+        type: string
+      title:
+        type: string
+    type: object
+  v1.ListArticleDTO:
+    properties:
+      articles:
+        items:
+          $ref: '#/definitions/v1.GetArticleDTO'
+        type: array
+    type: object
+info:
+  contact:
+    email: chandraphang.idn@gmail.com
+    name: Chandra Phang
+  description: To create, retrieve, update and delete article
+  title: Articles CRUD
+  version: 0.0.1
+paths:
+  /v1/articles:
+    get:
+      consumes:
+      - application/json
+      description: This API will fetch and return list of articles
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.SuccessResponse'
+            - properties:
+                result:
+                  $ref: '#/definitions/v1.ListArticleDTO'
+              type: object
+      summary: Get list of articles
+      tags:
+      - Article
+    post:
+      consumes:
+      - application/json
+      description: This API will create an article
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/response.SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.FailureResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.FailureResponse'
+      summary: Create an article
+      tags:
+      - Article
+  /v1/articles/id:
+    delete:
+      consumes:
+      - application/json
+      description: This API will delete an article
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.FailureResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.FailureResponse'
+      summary: Delete an article
+      tags:
+      - Article
+    get:
+      consumes:
+      - application/json
+      description: This API will fetch and return article by ID
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.SuccessResponse'
+            - properties:
+                result:
+                  $ref: '#/definitions/v1.GetArticleDTO'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.FailureResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.FailureResponse'
+      summary: Get article by ID
+      tags:
+      - Article
+    put:
+      consumes:
+      - application/json
+      description: This API will update an article
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.FailureResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.FailureResponse'
+      summary: Update an article
+      tags:
+      - Article
+swagger: "2.0"

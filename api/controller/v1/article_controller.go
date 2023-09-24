@@ -25,6 +25,14 @@ func InitArticleController() *articleController {
 	}
 }
 
+// ListArticles godoc
+// @Summary      Get list of articles
+// @Description  This API will fetch and return list of articles
+// @Tags         Article
+// @Accept       json
+// @Produce      json
+// @Success      200  {object}  response.SuccessResponse{result=v1.ListArticleDTO}
+// @Router       /v1/articles [get]
 func (c *articleController) ListArticles(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	articles := c.svc.ListArticles(ctx)
@@ -34,6 +42,16 @@ func (c *articleController) ListArticles(w http.ResponseWriter, r *http.Request)
 	controller.WriteSuccess(ctx, w, r, http.StatusOK, dto)
 }
 
+// GetArticle godoc
+// @Summary      Get article by ID
+// @Description  This API will fetch and return article by ID
+// @Tags         Article
+// @Accept       json
+// @Produce      json
+// @Success      200  {object}  response.SuccessResponse{result=v1.GetArticleDTO}
+// @Failure      400  {object}  response.FailureResponse
+// @Failure      404  {object}  response.FailureResponse
+// @Router       /v1/articles/id [get]
 func (c *articleController) GetArticle(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
@@ -58,6 +76,16 @@ func (c *articleController) GetArticle(w http.ResponseWriter, r *http.Request) {
 	controller.WriteSuccess(ctx, w, r, http.StatusOK, dto)
 }
 
+// CreateArticle godoc
+// @Summary      Create an article
+// @Description  This API will create an article
+// @Tags         Article
+// @Accept       json
+// @Produce      json
+// @Success      201  {object}  response.SuccessResponse
+// @Failure      400  {object}  response.FailureResponse
+// @Failure      500  {object}  response.FailureResponse
+// @Router       /v1/articles [post]
 func (c *articleController) CreateArticle(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
@@ -87,6 +115,16 @@ func (c *articleController) CreateArticle(w http.ResponseWriter, r *http.Request
 	controller.WriteSuccess(ctx, w, r, http.StatusCreated, nil)
 }
 
+// UpdateArticle godoc
+// @Summary      Update an article
+// @Description  This API will update an article
+// @Tags         Article
+// @Accept       json
+// @Produce      json
+// @Success      200  {object}  response.SuccessResponse
+// @Failure      400  {object}  response.FailureResponse
+// @Failure      500  {object}  response.FailureResponse
+// @Router       /v1/articles/id [put]
 func (c *articleController) UpdateArticle(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
@@ -125,6 +163,16 @@ func (c *articleController) UpdateArticle(w http.ResponseWriter, r *http.Request
 	controller.WriteSuccess(ctx, w, r, http.StatusOK, nil)
 }
 
+// DeleteArticle godoc
+// @Summary      Delete an article
+// @Description  This API will delete an article
+// @Tags         Article
+// @Accept       json
+// @Produce      json
+// @Success      200  {object}  response.SuccessResponse
+// @Failure      400  {object}  response.FailureResponse
+// @Failure      500  {object}  response.FailureResponse
+// @Router       /v1/articles/id [delete]
 func (c *articleController) DeleteArticle(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
