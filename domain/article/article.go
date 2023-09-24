@@ -3,10 +3,10 @@ package article
 import "context"
 
 type Article struct {
-	ID      string
-	Title   string
-	Desc    string
-	Content string
+	ID          string
+	Title       string
+	Description string
+	Content     string
 }
 
 type IArticleRepository interface {

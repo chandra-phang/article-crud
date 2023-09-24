@@ -2,7 +2,14 @@ package v1
 
 import (
 	"article-crud/api/controller"
+	"article-crud/api/controller/parse"
 	"article-crud/application"
+	v1request "article-crud/dto/request/v1"
+	v1response "article-crud/dto/response/v1"
+	"article-crud/log"
+	"encoding/json"
+	"errors"
+	"io/ioutil"
 	"net/http"
 )
 
@@ -20,35 +27,117 @@ func InitArticleController() *articleController {
 
 func (c *articleController) ListArticles(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
-	c.svc.ListArticles(ctx)
+	articles := c.svc.ListArticles(ctx)
 
-	controller.WriteSuccess(ctx, w, r, 200, nil)
+	dto := new(v1response.ListArticleDTO).ConvertFromArticlesEntity(articles)
+
+	controller.WriteSuccess(ctx, w, r, http.StatusOK, dto)
 }
 
 func (c *articleController) GetArticle(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
-	c.svc.ListArticles(ctx)
 
-	controller.WriteSuccess(ctx, w, r, 200, nil)
+	// extract path param
+	id, err := parse.PathParam(r, "id")
+
+	// If the parameter is not found, a 400 Bad Request error is returned to the client
+	if errors.Is(err, parse.ErrParamNotFound) {
+		controller.WriteError(ctx, w, r, http.StatusBadRequest, err)
+		return
+	}
+
+	article := c.svc.GetArticle(ctx, id)
+
+	dto := new(v1response.GetArticleDTO).ConvertFromArticleEntity(article)
+
+	controller.WriteSuccess(ctx, w, r, http.StatusOK, dto)
 }
 
 func (c *articleController) CreateArticle(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
-	c.svc.ListArticles(ctx)
 
-	controller.WriteSuccess(ctx, w, r, 200, nil)
+	reqBody, _ := ioutil.ReadAll(r.Body)
+	dto := v1request.CreateArticleDTO{}
+
+	if err := json.Unmarshal(reqBody, &dto); err != nil {
+		log.Errorf(ctx, err, "[ArticleController][CreateArticle] Failed to unmarshal request body %v into dto", reqBody)
+		controller.WriteError(ctx, w, r, http.StatusBadRequest, err)
+		return
+	}
+
+	err := dto.Validate(ctx)
+	if err != nil {
+		log.Errorf(ctx, err, "[ArticleController][CreateArticle] Validation failed for request dto %v ", dto)
+		controller.WriteError(ctx, w, r, http.StatusBadRequest, err)
+		return
+	}
+
+	err = c.svc.CreateArticle(ctx, dto)
+	if err != nil {
+		log.Errorf(ctx, err, "[ArticleController][CreateArticle] Failed to create article for request dto %v ", dto)
+		controller.WriteError(ctx, w, r, http.StatusInternalServerError, err)
+		return
+	}
+
+	controller.WriteSuccess(ctx, w, r, http.StatusCreated, nil)
 }
 
 func (c *articleController) UpdateArticle(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
-	c.svc.ListArticles(ctx)
 
-	controller.WriteSuccess(ctx, w, r, 200, nil)
+	// extract path param
+	id, err := parse.PathParam(r, "id")
+
+	// If the parameter is not found, a 400 Bad Request error is returned to the client
+	if errors.Is(err, parse.ErrParamNotFound) {
+		controller.WriteError(ctx, w, r, http.StatusBadRequest, err)
+		return
+	}
+
+	reqBody, _ := ioutil.ReadAll(r.Body)
+	dto := v1request.UpdateArticleDTO{}
+
+	if err := json.Unmarshal(reqBody, &dto); err != nil {
+		log.Errorf(ctx, err, "[ArticleController][UpdateArticle] Failed to unmarshal request body %v into dto", reqBody)
+		controller.WriteError(ctx, w, r, http.StatusBadRequest, err)
+		return
+	}
+
+	err = dto.Validate(ctx)
+	if err != nil {
+		log.Errorf(ctx, err, "[ArticleController][UpdateArticle] Validation failed for request dto %v ", dto)
+		controller.WriteError(ctx, w, r, http.StatusBadRequest, err)
+		return
+	}
+
+	err = c.svc.UpdateArticle(ctx, dto, id)
+	if err != nil {
+		log.Errorf(ctx, err, "[ArticleController][UpdateArticle] Failed to update article for request dto %v ", dto)
+		controller.WriteError(ctx, w, r, http.StatusInternalServerError, err)
+		return
+	}
+
+	controller.WriteSuccess(ctx, w, r, http.StatusOK, nil)
 }
 
 func (c *articleController) DeleteArticle(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
-	c.svc.ListArticles(ctx)
 
-	controller.WriteSuccess(ctx, w, r, 200, nil)
+	// extract path param
+	id, err := parse.PathParam(r, "id")
+
+	// If the parameter is not found, a 400 Bad Request error is returned to the client
+	if errors.Is(err, parse.ErrParamNotFound) {
+		controller.WriteError(ctx, w, r, http.StatusBadRequest, err)
+		return
+	}
+
+	err = c.svc.DeleteArticle(ctx, id)
+	if err != nil {
+		log.Errorf(ctx, err, "[ArticleController][DeleteArticle] Failed to delete article for id %s ", id)
+		controller.WriteError(ctx, w, r, http.StatusInternalServerError, err)
+		return
+	}
+
+	controller.WriteSuccess(ctx, w, r, http.StatusOK, nil)
 }
