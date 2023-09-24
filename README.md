@@ -1,6 +1,6 @@
 # article-crud
 
-Before running the application, you need to create a PostgreSQL DB with name articlesdb, and then you can run the migration file.
+Before running the application, you need to create a PostgreSQL DB with name **articlesdb**, and then you can run the migration file.
 
 After that, you can run the application by command
 ```
