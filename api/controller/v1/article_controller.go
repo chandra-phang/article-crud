@@ -46,7 +46,12 @@ func (c *articleController) GetArticle(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	article := c.svc.GetArticle(ctx, id)
+	article, err := c.svc.GetArticle(ctx, id)
+	if err != nil {
+		log.Errorf(ctx, err, "[ArticleController][GetArticle] Failed to get article with ID: %s ", id)
+		controller.WriteError(ctx, w, r, http.StatusNotFound, err)
+		return
+	}
 
 	dto := new(v1response.GetArticleDTO).ConvertFromArticleEntity(article)
 

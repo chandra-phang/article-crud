@@ -1,12 +1,17 @@
 package article
 
-import "context"
+import (
+	"context"
+	"time"
+)
 
 type Article struct {
 	ID          string
 	Title       string
 	Description string
 	Content     string
+	CreatedAt   time.Time
+	UpdatedAt   time.Time
 }
 
 type IArticleRepository interface {

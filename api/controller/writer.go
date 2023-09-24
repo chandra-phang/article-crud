@@ -24,7 +24,7 @@ func WriteSuccess(ctx context.Context, w http.ResponseWriter, r *http.Request, s
 func WriteError(ctx context.Context, w http.ResponseWriter, r *http.Request, statusCode int, err error) {
 	err = writeJSON(w, r, statusCode, response.FailureResponse{
 		Success: false,
-		Failure: err,
+		Failure: err.Error(),
 	})
 	if err != nil {
 		log.Print(ctx, err, "error while writing JSON response")

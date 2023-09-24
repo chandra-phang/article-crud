@@ -29,7 +29,7 @@ func InitRoutes() {
 		r.Get("/articles/{id}", articleController.GetArticle)
 		r.Post("/articles", articleController.CreateArticle)
 		r.Put("/articles/{id}", articleController.UpdateArticle)
-		r.Delete("/articles{id}", articleController.DeleteArticle)
+		r.Delete("/articles/{id}", articleController.DeleteArticle)
 	})
 
 	// Mount Swagger docs and redirect / to the Swagger UI

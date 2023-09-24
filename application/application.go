@@ -1,5 +1,7 @@
 package application
 
-func InitServices() {
-	InitArticleService()
+import "article-crud/handlers"
+
+func InitServices(h handlers.Handler) {
+	InitArticleService(h)
 }
