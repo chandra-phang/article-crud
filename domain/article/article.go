@@ -17,5 +17,5 @@ type Article struct {
 type IArticleRepository interface {
 	FindArticles(ctx context.Context, offset int64, limit int64) ([]*Article, error)
 	FindArticleByURI(ctx context.Context, uri string) (*Article, error)
-	Save(ctx context.Context, segmentEntity *Article) error
+	Save(ctx context.Context, articleEntity *Article) error
 }
