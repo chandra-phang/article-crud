@@ -1,16 +1,23 @@
 # article-crud
 
-Before running the application, you need to create a PostgreSQL DB with name **articlesdb**, and then you can run the migration file.
+To get started with the article-crud application, follow these steps:
 
-After that, you can run the application by command
-```
-go run main.go
-```
+1. **Create a PostgreSQL Database:**
+   - Make sure you have PostgreSQL installed.
+   - Create a database named **articlesdb**.
 
-The server will be accessible through:
-http://localhost:3000
+2. **Run Migration:**
+   - Execute the migration file to set up the necessary database schema.
 
-The API documentation is accessible through:
-http://localhost:3000/swagger/index.html
+3. **Run the Application:**
+   - Launch the application using the command:
+     ```bash
+     go run main.go
+     ```
 
-Unit test has not yet been added because of time limitations.
+4. **Access the Server:**
+   - The server will be accessible at http://localhost:3000.
+
+5. **Explore API Documentation:**
+   - Explore the API documentation at http://localhost:3000/swagger/index.html for a detailed understanding of available endpoints.
+
